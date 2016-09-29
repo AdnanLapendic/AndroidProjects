@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/vijesti"
+            android:title="Vijesti" />
+        <item
+            android:id="@+id/bih"
+            android:title="BiH" />
+        <item
+            android:id="@+id/regija"
+            android:title="Regija" />
+        <item
+            android:id="@+id/svijet"
+            android:title="Svijet" />
+        <item
+            android:id="@+id/sport"
+            android:title="Sport" />
+        <item
+            android:id="@+id/scitech"
+            android:title="Scitech" />
+        <item
+            android:id="@+id/zanimljivosti"
+            android:title="Zanimljivosti" />
+
+    </group>
+
+    <item android:title="Info">
+        <menu>
+
+            <item
+                android:title="Digital Media Design" />
+            <item
+                android:title="info@dmd.ba" />
+            <item
+                android:title="+387 33 123 456" />
+        </menu>
+    </item>
+
+</menu>
