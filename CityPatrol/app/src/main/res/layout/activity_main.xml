@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context="com.lapa.citypatrol.MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/lapa" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/buttonNew"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshape"
+            android:drawableTint="#193056"
+            android:drawableTop="@drawable/materialnew"
+            android:paddingTop="25dp"
+            android:text="New Issue"
+            android:textColor="#193056"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonReportedIssues"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshape"
+            android:drawableTint="#193056"
+            android:drawableTop="@drawable/materialsearch"
+            android:paddingTop="25dp"
+            android:text="Reported"
+            android:textColor="#193056"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/buttonGprs"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshape"
+            android:drawableTint="#193056"
+            android:drawableTop="@drawable/materialsatelite"
+            android:paddingTop="25dp"
+            android:text="GPRS"
+            android:textColor="#193056"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:id="@+id/buttonSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshape"
+            android:drawableTint="#193056"
+            android:drawableTop="@drawable/materialsettings"
+            android:paddingTop="25dp"
+            android:text="Settings"
+            android:textColor="#193056"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <TextView
+
+        android:id="@+id/copyRight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Copyright Leftor doo Tuzla" />
+
+
+</LinearLayout>
