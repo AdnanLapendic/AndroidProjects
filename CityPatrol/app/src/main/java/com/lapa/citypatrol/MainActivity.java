@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Issue> issues = new ArrayList<>();
     private DbHandler db;
     public static String ISSUES = "";
-    public static final String JSON_URL = "http://172.16.0.140:9000/api/issues";
+    public static final String JSON_URL = "http://192.168.100.4:9000/api/issues";
     private Vibrator vibe;
 
 
