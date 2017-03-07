@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         String result = null;
 
         try {
-            result = task.execute("http://www.posh24.com/celebrities").get();
+            result = task.execute("http://www.posh24.se/kandisar").get();
 
             String [] splitResult = result.split("\t\t\t<div class=\"sidebarContainer\">\n");
 
