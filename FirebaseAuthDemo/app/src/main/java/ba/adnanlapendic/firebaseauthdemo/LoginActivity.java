@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,53 +17,59 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements  View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private EditText email;
-    private EditText password;
-    private Button register;
-    private TextView signIn;
-
+    private Button signInButton;
+    private EditText emailEditText;
+    private EditText passwordEditText;
+    private TextView signUpTextView;
     private ProgressDialog progressDialog;
-
     private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
-        email = (EditText) findViewById(R.id.emailText);
-        password = (EditText) findViewById(R.id.passwordText);
-        register = (Button) findViewById(R.id.registerButton);
-        signIn = (TextView) findViewById(R.id.signInTextView);
+        signInButton = (Button) findViewById(R.id.signInButton);
+        emailEditText = (EditText) findViewById(R.id.emailText);
+        passwordEditText = (EditText)findViewById(R.id.passwordText);
+        signUpTextView = (TextView) findViewById(R.id.loginTextView);
+
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
 
         if(firebaseAuth.getCurrentUser() != null){
+
             finish();
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
+
         }
 
-        register.setOnClickListener(this);
-        signIn.setOnClickListener(this);
+        signInButton.setOnClickListener(this);
+        signUpTextView.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
-        if(v == register){
-            registerUser();
+
+        if(v == signInButton){
+            userLogin();
         }
 
-        if(v == signIn){
-            startActivity(new Intent(this, LoginActivity.class));
+        if(v == signUpTextView){
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
-    private void registerUser() {
-        String mail = email.getText().toString().trim();
-        String pass = password.getText().toString().trim();
+    private void userLogin(){
+
+        String mail = emailEditText.getText().toString().trim();
+        String pass = passwordEditText.getText().toString().trim();
+
 
         if(TextUtils.isEmpty(mail)){
             Toast.makeText(this, "PleaseEnter email", Toast.LENGTH_LONG).show();
@@ -77,25 +82,17 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
         progressDialog.setMessage("Registering User...");
         progressDialog.show();
-        firebaseAuth.createUserWithEmailAndPassword(mail, pass)
+
+        firebaseAuth.signInWithEmailAndPassword(mail, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
                         if(task.isSuccessful()){
-//                            progressDialog.hide();
-
-//                            Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        } else {
-//                            progressDialog.hide();
-
-                            Toast.makeText(MainActivity.this, "Could not register...please try again", Toast.LENGTH_SHORT).show();
-
                         }
-                        progressDialog.dismiss();
                     }
                 });
-
     }
 }
