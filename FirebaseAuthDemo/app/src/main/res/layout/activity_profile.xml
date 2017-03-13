@@ -20,6 +20,24 @@
             android:text="Large Text"
             android:textSize="30sp"/>
 
+        <EditText
+            android:id="@+id/fullNameEditText"
+            android:hint="Enter your full name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/addressEditText"
+            android:hint="Enter address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/saveInformationButton"
+            android:text="Save information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/buttonLogout"
             android:layout_marginTop="20dp"
