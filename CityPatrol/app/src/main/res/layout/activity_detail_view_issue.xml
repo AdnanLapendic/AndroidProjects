@@ -1,0 +1,113 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailViewIssueActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/issueDetailViewCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textSize="25sp"
+                android:paddingLeft="10dp"
+                android:background="@color/colorPrimary"
+                android:textColor="#FFFFFF"/>
+
+            <ImageView
+                android:id="@+id/issueDetailViewImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/frame4"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address: "
+                android:paddingLeft="10dp"
+                android:textColor="#000000"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/issueDetailViewAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Custom address 12/A"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitude:"
+                android:paddingLeft="10dp"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/issueDetailViewLatitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00.0000000"
+                android:paddingLeft="10dp"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude:"
+                android:paddingLeft="10dp"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/issueDetailViewLongitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00.0000000"
+                android:paddingLeft="10dp"
+                android:textSize="15sp"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/issueDetailViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#000000"
+            android:paddingTop="12dp"
+            android:text="kansdk jakd hakhdkajnd kjankd abkd bakd baskjd bkajbdkasjbd kajnbdk jandk abkd abkjdhb aksdbakbd kabdka"/>
+
+    </LinearLayout>
+
+</ScrollView>
