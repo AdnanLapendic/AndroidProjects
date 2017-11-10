@@ -19,6 +19,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_small"
-        android:background="@drawable/rounded_rect_bg"/>
+        android:background="@drawable/chat_rounded_rect_bg"
+        android:hint="@string/type_a_message"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="@dimen/padding_small"/>
 
 </RelativeLayout>
