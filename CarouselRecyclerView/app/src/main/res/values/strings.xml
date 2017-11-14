@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CarouselRecyclerView</string>
+    <string name="carousel_subtitle">Swipe this section horizontally to scroll its items.</string>
+    <string name="carousel">Carousel</string>
+</resources>
