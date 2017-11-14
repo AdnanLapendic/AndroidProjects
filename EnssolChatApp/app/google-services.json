@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "17966299050",
+    "firebase_url": "https://fire-app-5b8a2.firebaseio.com",
+    "project_id": "fire-app-5b8a2",
+    "storage_bucket": "fire-app-5b8a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17966299050:android:070684b6baf87ed7",
+        "android_client_info": {
+          "package_name": "de.enssol.lapendic.adnan.enssolchatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17966299050-e6r8q5s8jml6e05q657pc4lp398q7tao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.enssol.lapendic.adnan.enssolchatapp",
+            "certificate_hash": "449690c27efe64a86330d5256fe7768ba9f203d7"
+          }
+        },
+        {
+          "client_id": "17966299050-g6f38ql1pcf8c10vl5sbq4s7i3p4lot9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEEBmGKlyZtJbNOXVfEyNaIzBiCd__C6Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17966299050-g6f38ql1pcf8c10vl5sbq4s7i3p4lot9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
