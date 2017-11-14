@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Enssol Chat App</string>
+    <string name="newAccountButtonText">Need a new Account?</string>
 </resources>
