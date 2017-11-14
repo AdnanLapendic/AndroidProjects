@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JsonAndRecyclerViewDemo.iml" filepath="$PROJECT_DIR$/JsonAndRecyclerViewDemo.iml" />
+      <module fileurl="file://C:\Users\user\AndroidStudioProjects\JsonAndRecyclerViewDemo\JsonAndRecyclerViewDemo.iml" filepath="C:\Users\user\AndroidStudioProjects\JsonAndRecyclerViewDemo\JsonAndRecyclerViewDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\user\AndroidStudioProjects\JsonAndRecyclerViewDemo\app\app.iml" filepath="C:\Users\user\AndroidStudioProjects\JsonAndRecyclerViewDemo\app\app.iml" />
     </modules>
   </component>
 </project>

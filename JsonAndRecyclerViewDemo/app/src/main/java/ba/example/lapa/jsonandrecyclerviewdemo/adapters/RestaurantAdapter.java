@@ -45,7 +45,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         holder.setRating(restaurant.getRating());
 
         Glide.with(mACtivity)
-                .load(restaurant.getRating())
+                .load(restaurant.getImageUrl())
                 .into(holder.restaurantImageView);
     }
 
