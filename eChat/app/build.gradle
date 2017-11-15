@@ -28,8 +28,11 @@ dependencies {
     //Displaying images
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
-    compile 'com.google.firebase:firebase-core:11.6.0'
-    compile 'com.google.firebase:firebase-database:11.6.0'
+//    compile 'com.google.firebase:firebase-core:11.4.20'
+    compile 'com.google.firebase:firebase-database:11.4.2'
+    compile 'com.google.firebase:firebase-auth:11.4.2'
+    compile 'com.firebaseui:firebase-ui-auth:3.1.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
 

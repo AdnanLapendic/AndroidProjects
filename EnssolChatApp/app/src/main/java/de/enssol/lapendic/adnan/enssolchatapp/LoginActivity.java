@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
                     mProgressDialog.setCanceledOnTouchOutside(false);
                     mProgressDialog.show();
 
-
                     //method for login user
                     loginUser(email, password);
 
@@ -86,6 +85,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     //Starting new Activity after successful login
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                    //When user click back it wont be sent to start activity, it will go to OS and put app on stack
+                    //App is minimized and user is still sign in
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
 

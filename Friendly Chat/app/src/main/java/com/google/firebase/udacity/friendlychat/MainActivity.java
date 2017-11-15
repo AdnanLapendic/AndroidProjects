@@ -33,7 +33,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
+//import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -151,33 +151,38 @@ public class MainActivity extends AppCompatActivity {
                     onSignedInInitialize(user.getDisplayName());
                 } else {
                     onSignOutCleaner();
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setAvailableProviders(
-                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
-                                                  ))
-                                    .build(),
-                            RC_SIGN_IN);
+//                    startActivityForResult(
+                            // Get an instance of AuthUI based on the default app
+//                            AuthUI.getInstance().createSignInIntentBuilder().build(),
+//                            RC_SIGN_IN);
+
+//                    startActivityForResult(
+//                            AuthUI.getInstance()
+//                                    .createSignInIntentBuilder()
+//                                    .setAvailableProviders(
+//                                            Arrays.asList(
+//                                                    new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+//                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
+//                                                  ))
+//                                    .build(),
+//                            RC_SIGN_IN);
                 }
 
             }
         };
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RC_SIGN_IN) {
-            if(resultCode == RESULT_OK) {
-                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-            }else if(resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(resultCode == RC_SIGN_IN) {
+//            if(resultCode == RESULT_OK) {
+//                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+//            }else if(resultCode == RESULT_CANCELED) {
+//                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -188,7 +193,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.sign_out_menu:
+//                AuthUI.getInstance().signOut(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @Override
@@ -197,8 +209,8 @@ public class MainActivity extends AppCompatActivity {
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
-        detachDatabaseListener();
         mMessageAdapter.clear();
+        detachDatabaseReadListener();
     }
 
     @Override
@@ -216,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
     private void onSignOutCleaner() {
         mUsername = ANONYMOUS;
         mMessageAdapter.clear();
+        detachDatabaseReadListener();
     }
 
     private void attachDatabaseReadListener() {
@@ -227,22 +240,15 @@ public class MainActivity extends AppCompatActivity {
                     mMessageAdapter.add(friendlyMessage);
                 }
 
-                @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                 }
-
-                @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
 
                 }
-
-                @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
                 }
-
-                @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
@@ -253,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void detachDatabaseListener() {
+    private void detachDatabaseReadListener() {
         if(mChildEventListener != null) {
             mMessagesDatabaseReference.removeEventListener(mChildEventListener);
             mChildEventListener = null;
