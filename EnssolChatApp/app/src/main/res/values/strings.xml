@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Enssol Chat App</string>
     <string name="newAccountButtonText">Need a new Account?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="username">Username</string>
+    <string name="log_out">Log out</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="log_out_menu_btn">All Users</string>
+    <string name="create_a_new_account">Create a New Account</string>
+    <string name="sign_in_btn">Already have account</string>
+    <string name="welcome_to_enssol_chat_app">Welcome to Enssol Chat App</string>
+    <string name="login">Login</string>
+    <string name="login_to_your_account">Login to your Account</string>
 </resources>
