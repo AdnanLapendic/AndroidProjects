@@ -66,11 +66,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
          super.onOptionsItemSelected(item);
 
-         if(item.getItemId() == R.id.main_logout_btn){
-             Log.i("XXXXXXXXXXXXXXXXXXXXXX", FirebaseAuth.getInstance().getCurrentUser().toString());
+         //Signing out from the app (ending session) and redirecting to start screen
+         if(item.getItemId() == R.id.main_logout_btn) {
              FirebaseAuth.getInstance().signOut();
              sendToStartActivity();
+         }
 
+         //Open settings screen when user select Account Settings from menu
+         if (item.getItemId() == R.id.main_account_settings){
+
+             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+             startActivity(intent);
          }
          return true;
     }

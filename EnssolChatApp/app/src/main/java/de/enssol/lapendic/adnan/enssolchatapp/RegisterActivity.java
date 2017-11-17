@@ -33,7 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
     private ProgressDialog mRegProgress;
-    private DatabaseReference mDatabase;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReferenceToDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +91,15 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                     String uid = currentUser.getUid();
 
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                    mDatabase = FirebaseDatabase.getInstance();
+                    mReferenceToDatabase = mDatabase.getReference().child("users").child(uid);
+                    mRegProgress.dismiss();
+
+
+//                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
                     HashMap<String, String> userMap = new HashMap<>();
                     userMap.put("name", display_name);
@@ -102,7 +107,9 @@ public class RegisterActivity extends AppCompatActivity {
                     userMap.put("image", "default");
                     userMap.put("thumb_image", "default");
 
-                    mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    mDatabase.setValue(userMap);
+
+                    mReferenceToDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
