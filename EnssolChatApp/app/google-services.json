@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "17966299050-clj4866tpjgjh50t1hum8jr2rmo5kt1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.enssol.lapendic.adnan.enssolchatapp",
+            "certificate_hash": "98b5fcb5f2a9233c7207aae454374c9daa7e750e"
+          }
+        },
+        {
           "client_id": "17966299050-ma328q8s177a6jbvpn0tipr0cjnp41av.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
