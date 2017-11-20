@@ -2,6 +2,7 @@ package de.enssol.lapendic.adnan.enssolchatapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,13 +25,21 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -68,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+        mUserDatabase.keepSynced(true);
 
         mProfileImage = findViewById(R.id.settings_image);
         mName = findViewById(R.id.settings_display_name);
@@ -75,19 +85,41 @@ public class SettingsActivity extends AppCompatActivity {
         mChangeStatusBtn = findViewById(R.id.settings_change_status_btn);
         mChangeProfileImageBtn = findViewById(R.id.settings_change_image_btn);
 
+
+
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                //fetching data from db
                 String name = dataSnapshot.child("name").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                final String image = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
                 String thumbnail = dataSnapshot.child("thumb_image").getValue().toString();
 
+                //setting data to user settings activity
                 mName.setText(name);
                 mStatus.setText(status);
-                Picasso.with(SettingsActivity.this).load(image).into(mProfileImage);
+                if(!image.equals("default")){
+                    //Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.adnan).into(mProfileImage);
 
+                    //Try to load image offline if available, and if not image will be downloaded from db storage
+                    Picasso.with(SettingsActivity.this).load(image).networkPolicy(NetworkPolicy.NO_CACHE.OFFLINE).
+                            placeholder(R.drawable.adnan).into(mProfileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.adnan).into(mProfileImage);
+
+
+                        }
+                    });
+
+                }
             }
 
             @Override
@@ -96,6 +128,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        //changing profile status
         mChangeStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,10 +139,10 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        //changing profile picture
         mChangeProfileImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -124,17 +157,22 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //loading profile image from gallery
         if(requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
             Uri imageUri = data.getData();
 
-// start cropping activity for pre-acquired image saved on the device
+        // start cropping activity for pre-acquired image saved on the device
             CropImage.activity(imageUri)
                     .setAspectRatio(1,1)
-                    .start(this);        }
+                    .start(this);
+        }
+
+        //cropping selected image from gallery
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
@@ -146,24 +184,79 @@ public class SettingsActivity extends AppCompatActivity {
                 mProgress.setCanceledOnTouchOutside(false);
                 mProgress.show();
 
+                //utl to the profile picture
                 Uri resultUri = result.getUri();
 
-                StorageReference filePath = mImageStorage.child("profile_images").child(mCurrentUser.getUid() + ".jpg");
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                //creating thumbnail image from profile picture
+                File thumbnailFilePath = new File(resultUri.getPath());
+
+                //setting thumbnail max size and quality using Compressor library
+                Bitmap thumbnailImage = null;
+                try {
+                    thumbnailImage = new Compressor(this)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .setQuality(50)
+                            .compressToBitmap(thumbnailFilePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //ByteArray - used to upload image/thumbnail
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumbnailImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumbBide = baos.toByteArray();
+
+                String currentUser = mCurrentUser.getUid();
+
+                //profile image in db storage/path in firebase
+                StorageReference imageFilePath = mImageStorage.child("profile_images").child(currentUser + ".jpg");
+
+                //save thumbnail image in storage/path in firebase
+                final StorageReference thumbFilePath = mImageStorage.child("profile_images").child("thumbnail").child(currentUser + ".jpg");
+
+                //uploading file
+                imageFilePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){
-                            String downloadUrl = task.getResult().getDownloadUrl().toString();
-                            mUserDatabase.child("image").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        mProgress.dismiss();
-                                        Toast.makeText(SettingsActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
 
+                            //getting url of the image
+                            final String downloadUrl = task.getResult().getDownloadUrl().toString();
+
+                            UploadTask uploadTask = thumbFilePath.putBytes(thumbBide);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumbTask) {
+
+                                    String thumbnailDownloadUrl = thumbTask.getResult().getDownloadUrl().toString();
+
+                                    if(thumbTask.isSuccessful()) {
+
+                                        //updating data in db storage - image and thumbnail
+                                        Map updateHashMap = new HashMap<>();
+                                        updateHashMap.put("image", downloadUrl);
+                                        updateHashMap.put("thumb_image", thumbnailDownloadUrl);
+
+                                        mUserDatabase.updateChildren(updateHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    mProgress.dismiss();
+                                                    Toast.makeText(SettingsActivity.this, "Success Uploading.", Toast.LENGTH_LONG).show();
+
+                                                }
+                                            }
+                                        });
+
+                                    }else {
+                                        Toast.makeText(SettingsActivity.this, "Error uploading thumbnail.", Toast.LENGTH_LONG).show();
+                                        mProgress.dismiss();
                                     }
                                 }
                             });
+
                         }else {
                             Toast.makeText(SettingsActivity.this, "Not working", Toast.LENGTH_LONG).show();
                             mProgress.dismiss();
@@ -176,6 +269,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
-    }
+}
 
 
