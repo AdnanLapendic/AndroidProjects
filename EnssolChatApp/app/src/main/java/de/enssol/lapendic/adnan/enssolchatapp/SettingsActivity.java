@@ -2,6 +2,7 @@ package de.enssol.lapendic.adnan.enssolchatapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +27,17 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -86,8 +93,10 @@ public class SettingsActivity extends AppCompatActivity {
 
                 mName.setText(name);
                 mStatus.setText(status);
-                Picasso.with(SettingsActivity.this).load(image).into(mProfileImage);
+                if(!image.equals("default")){
+                    Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.adnan).into(mProfileImage);
 
+                }
             }
 
             @Override
@@ -148,22 +157,67 @@ public class SettingsActivity extends AppCompatActivity {
 
                 Uri resultUri = result.getUri();
 
-                StorageReference filePath = mImageStorage.child("profile_images").child(mCurrentUser.getUid() + ".jpg");
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                File thumbnailFilePath = new File(resultUri.getPath());
+
+                Bitmap thumbnailImage = null;
+                try {
+                    thumbnailImage = new Compressor(this)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .setQuality(50)
+                            .compressToBitmap(thumbnailFilePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumbnailImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumbBide = baos.toByteArray();
+
+                String currentUser = mCurrentUser.getUid();
+
+                StorageReference imageFilePath = mImageStorage.child("profile_images").child(currentUser + ".jpg");
+                final StorageReference thumbFilePath = mImageStorage.child("profile_images").child("thumbnail").child(currentUser + ".jpg");
+
+                imageFilePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){
-                            String downloadUrl = task.getResult().getDownloadUrl().toString();
-                            mUserDatabase.child("image").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        mProgress.dismiss();
-                                        Toast.makeText(SettingsActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
 
+                            final String downloadUrl = task.getResult().getDownloadUrl().toString();
+
+                            UploadTask uploadTask = thumbFilePath.putBytes(thumbBide);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumbTask) {
+
+                                    String thumbnailDownloadUrl = thumbTask.getResult().getDownloadUrl().toString();
+
+                                    if(thumbTask.isSuccessful()) {
+
+                                        Map updateHashMap = new HashMap<>();
+                                        updateHashMap.put("image", downloadUrl);
+                                        updateHashMap.put("thumb_image", thumbnailDownloadUrl);
+
+                                        mUserDatabase.updateChildren(updateHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    mProgress.dismiss();
+                                                    Toast.makeText(SettingsActivity.this, "Success Uploading.", Toast.LENGTH_LONG).show();
+
+                                                }
+                                            }
+                                        });
+
+                                    }else {
+                                        Toast.makeText(SettingsActivity.this, "Error uploading thumbnail.", Toast.LENGTH_LONG).show();
+                                        mProgress.dismiss();
                                     }
                                 }
                             });
+
                         }else {
                             Toast.makeText(SettingsActivity.this, "Not working", Toast.LENGTH_LONG).show();
                             mProgress.dismiss();
@@ -176,6 +230,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
-    }
+}
 
 
