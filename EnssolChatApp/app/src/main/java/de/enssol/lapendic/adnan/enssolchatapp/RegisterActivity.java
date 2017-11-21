@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
@@ -65,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String displayName = mDisplayName.getText().toString();
                 String email = mEmail.getText().toString();
                 String password = mPasssword.getText().toString();
+                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
 
                 //Check if fields are empty at register screen
                 if (!TextUtils.isEmpty(displayName) || !TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
@@ -72,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mRegProgress.setMessage("Please wait while we create your account!");
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.show();
-                    registerUser(displayName, email, password); //Calling method to register new user
+                    registerUser(displayName, email, password, deviceToken); //Calling method to register new user
                 }
 
             }
@@ -85,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
      * @param email - Your email address
      * @param password - Your password for login
      */
-    private void registerUser(final String display_name, String email, String password) {
+    private void registerUser(final String display_name, String email, String password, final String deviceTokken) {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -103,9 +106,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                     HashMap<String, String> userMap = new HashMap<>();
                     userMap.put("name", display_name);
-                    userMap.put("status", "Hi there I'm using Enssol Chat App");
+                    userMap.put("status", "My status...");
                     userMap.put("image", "default");
                     userMap.put("thumb_image", "default");
+                    userMap.put("device_token", deviceTokken);
 
 //                    mDatabase.setValue(userMap);
 

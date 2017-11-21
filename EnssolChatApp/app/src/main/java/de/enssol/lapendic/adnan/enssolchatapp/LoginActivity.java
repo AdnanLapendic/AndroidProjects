@@ -13,9 +13,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
+    private DatabaseReference mUserDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         //Firebase
         mAuth = FirebaseAuth.getInstance();
 
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,14 +89,24 @@ public class LoginActivity extends AppCompatActivity {
 
                     mProgressDialog.dismiss();
 
-                    //Starting new Activity after successful login
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                    String currentUser = mAuth.getCurrentUser().getUid();
 
-                    //When user click back it wont be sent to start activity, it will go to OS and put app on stack
-                    //App is minimized and user is still sign in
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    mUserDatabase.child(currentUser).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            //Starting new Activity after successful login
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                            //When user click back it wont be sent to start activity, it will go to OS and put app on stack
+                            //App is minimized and user is still sign in
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                    });
 
                 }else{
                     mProgressDialog.hide();
