@@ -34,7 +34,7 @@ public class UsersViewHolder extends RecyclerView.ViewHolder{
      */
     public void setUserName(String name) {
 
-        TextView userNameView = mView.findViewById(R.id.list_user_name);
+        TextView userNameView = mView.findViewById(R.id.single_user_name);
         userNameView.setText(name);
 
     }
@@ -44,7 +44,7 @@ public class UsersViewHolder extends RecyclerView.ViewHolder{
      * @param status - User status
      */
     public void setUserStatus(String status) {
-        TextView userStatusView = mView.findViewById(R.id.list_user_status);
+        TextView userStatusView = mView.findViewById(R.id.user_single_status);
         userStatusView.setText(status);
     }
 

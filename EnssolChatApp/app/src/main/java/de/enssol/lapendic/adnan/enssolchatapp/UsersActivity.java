@@ -44,7 +44,7 @@ public class UsersActivity extends AppCompatActivity {
         //initialize Firebase Recycle Adapter
         FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(
                 Users.class,
-                R.layout.single_list_user_layout,
+                R.layout.user_single_layout,
                 UsersViewHolder.class,
                 mUsersDatabase
 
