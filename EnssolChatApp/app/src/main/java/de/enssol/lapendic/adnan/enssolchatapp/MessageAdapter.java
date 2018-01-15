@@ -2,6 +2,7 @@ package de.enssol.lapendic.adnan.enssolchatapp;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,30 +89,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             }
         });
 
-        if (messageType.equals("text")){
+        if (messageType.equals("text")) {
             viewHolder.messageText.setText(c.getMessages());
-            viewHolder.messageImage.setVisibility(View.VISIBLE);
+            viewHolder.messageImage.setVisibility(View.GONE);
 
         } else {
 
             viewHolder.messageText.setVisibility(View.INVISIBLE);
 
+            Log.i("----------------------", c.getMessages());
+
             Picasso.with(viewHolder.profileImage.getContext()).load(c.getMessages())
                     .placeholder(R.drawable.adnan).into(viewHolder.messageImage);
 
         }
-
-//
-//        if(fromUser.equals(currentUserId)){
-//            viewHolder.messageText.setBackgroundColor(Color.WHITE);
-//            viewHolder.messageText.setTextColor(Color.BLACK);
-//        } else {
-//            viewHolder.messageText.setBackgroundResource(R.drawable.message_text_background);
-//            viewHolder.messageText.setTextColor(Color.WHITE);
-//        }
-//
-//        viewHolder.messageText.setText(c.getMessages());
-//        viewHolder.displayName.setText(c.getFrom());
     }
 
     @Override

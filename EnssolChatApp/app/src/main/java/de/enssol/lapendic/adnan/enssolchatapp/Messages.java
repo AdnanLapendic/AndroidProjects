@@ -8,24 +8,17 @@ import android.os.Message;
 
 public class Messages {
 
-    private String messages;
+    private String message;
     private boolean seen;
     private long time;
     private String type;
     private String from;
 
-    public Messages(String message, boolean seen, long time, String type){
-        this.messages = message;
+    public Messages(String message, boolean seen, long time, String type, String from){
+        this.message = message;
         this.seen = seen;
         this.time = time;
         this.type = type;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
         this.from = from;
     }
 
@@ -34,14 +27,14 @@ public class Messages {
     }
 
     public String getMessages() {
-        return messages;
+        return message;
     }
 
-    public void setMessages(String messages) {
-        this.messages = messages;
+    public void setMessages(String message) {
+        this.message = message;
     }
 
-    public boolean isSeen() {
+    public boolean getSeen() {
         return seen;
     }
 
@@ -63,5 +56,21 @@ public class Messages {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 }
