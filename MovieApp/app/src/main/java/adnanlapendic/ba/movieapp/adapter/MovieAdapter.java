@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import adnanlapendic.ba.movieapp.DetailActivity;
@@ -33,10 +35,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         this.movieList = movieList;
     }
 
+
    @Override
     public MovieAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_card, viewGroup, false);
-
        return new MyViewHolder(view);
    }
 
@@ -46,7 +48,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         String vote = Double.toString(movieList.get(i).getVoteAverage());
         viewHolder.userRating.setText(vote);
 
-        Glide.with(mContext).load(movieList.get(i).getPosterPath()).placeholder(R.drawable.load).into(viewHolder.thumbnail);
+        String poster = "https://image.tmdb.org/t/p/w500" + movieList.get(i).getPosterPath();
+
+        Log.i(" o o o o o o o o o o o", movieList.get(i).getPosterPath());
+
+        Glide.with(mContext).load(poster).placeholder(R.drawable.load).into(viewHolder.thumbnail);
 
     }
 
@@ -64,9 +70,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
         public MyViewHolder(View view){
             super(view);
-            title = view.findViewById(R.id.movie_title);
+            title = view.findViewById(R.id.title);
             userRating = view.findViewById(R.id.user_rating);
             thumbnail = view.findViewById(R.id.thumbnail);
+
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
