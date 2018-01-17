@@ -35,15 +35,29 @@
                 android:textColor="@color/movie_title"
                 android:textSize="@dimen/movie_title"/>
 
-            <TextView
-                android:id="@+id/user_rating"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingLeft="@dimen/movie_title_padding"
                 android:paddingRight="@dimen/movie_title_padding"
                 android:paddingBottom="@dimen/user_rating_padding_bottom"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/user_rating"/>
+                android:gravity="bottom"
+                android:layout_gravity="bottom"
+                android:foregroundGravity="bottom">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rating: "
+                    android:textSize="@dimen/user_rating" />
+
+                <TextView
+                    android:id="@+id/user_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/user_rating"/>
+            </LinearLayout>
 
         </LinearLayout>
 
