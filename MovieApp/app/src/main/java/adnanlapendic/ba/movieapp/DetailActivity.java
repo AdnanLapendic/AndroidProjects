@@ -29,6 +29,8 @@ import java.util.List;
 import adnanlapendic.ba.movieapp.adapter.TrailerAdapter;
 import adnanlapendic.ba.movieapp.api.Client;
 import adnanlapendic.ba.movieapp.api.Service;
+import adnanlapendic.ba.movieapp.data.FavoriteDbHelper;
+import adnanlapendic.ba.movieapp.model.Movie;
 import adnanlapendic.ba.movieapp.model.Trailer;
 import adnanlapendic.ba.movieapp.model.TrailerResponse;
 import retrofit2.Call;
@@ -49,6 +51,9 @@ public class DetailActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private TrailerAdapter adapter;
     private List<Trailer> trailerList;
+    private FavoriteDbHelper favoriteDbHelper;
+    private Movie favoriteMovie;
+    private final AppCompatActivity activity = DetailActivity.this;
 
 
     @Override
@@ -98,15 +103,19 @@ public class DetailActivity extends AppCompatActivity{
             public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
                 if(favorite){
                 SharedPreferences.Editor editor = getSharedPreferences("adnanlapendic.ba.movieapp.Detailactivity", MODE_PRIVATE).edit();
-                editor.putBoolean("favotire_added", true);
-                editor.commit();
-//                saveFavorite();
+                editor.putBoolean("favorite_added", true);
+                editor.apply();
+                saveFavorite();
                 Snackbar.make(buttonView, "Movie added to favorite list", Snackbar.LENGTH_SHORT).show();
 
                 }else {
+                    int movieId= getIntent().getExtras().getInt("id");
+                    favoriteDbHelper = new FavoriteDbHelper(DetailActivity.this);
+                    favoriteDbHelper.deleteFavorite(movieId);
+
                     SharedPreferences.Editor editor = getSharedPreferences("adnanlapendic.ba.movieapp.DetailActivity", MODE_PRIVATE).edit();
                     editor.putBoolean("favorite_removed", true);
-                    editor.commit();
+                    editor.apply();
                     Snackbar.make(buttonView, "Movie removed from favorite list", MODE_PRIVATE).show();
                 }
             }
@@ -114,9 +123,6 @@ public class DetailActivity extends AppCompatActivity{
 
         initViews();
         
-    }
-
-    private void saveFavorite() {
     }
 
     private void initCollapsingToolbar() {
@@ -196,5 +202,24 @@ public class DetailActivity extends AppCompatActivity{
             Log.d("Error", e.getMessage());
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+    private void saveFavorite() {
+
+        favoriteDbHelper = new FavoriteDbHelper(activity);
+        favoriteMovie = new Movie();
+        int movieId = getIntent().getExtras().getInt("id");
+        String rate = getIntent().getExtras().getString("vote_average");
+        String poster = getIntent().getExtras().getString("poster_path");
+        favoriteMovie.setId(movieId);
+        favoriteMovie.setOrginnalTitle(nameOfMovie.getText().toString());
+        favoriteMovie.setPosterPath(poster);
+        favoriteMovie.setVoteAverage(Double.parseDouble(rate));
+        favoriteMovie.setOverview(plotSynopsis.getText().toString());
+
+        favoriteDbHelper.addFavorite(favoriteMovie);
+
+
+
+
     }
 }
