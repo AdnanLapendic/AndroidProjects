@@ -1,11 +1,14 @@
 package adnanlapendic.ba.movieapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -86,8 +90,33 @@ public class DetailActivity extends AppCompatActivity{
             Toast.makeText(this, "No API Data", Toast.LENGTH_SHORT).show();
         }
 
+        MaterialFavoriteButton materialFavoriteButton = findViewById(R.id.favorite_button);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        materialFavoriteButton.setOnFavoriteChangeListener(new MaterialFavoriteButton.OnFavoriteChangeListener() {
+            @Override
+            public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
+                if(favorite){
+                SharedPreferences.Editor editor = getSharedPreferences("adnanlapendic.ba.movieapp.Detailactivity", MODE_PRIVATE).edit();
+                editor.putBoolean("favotire_added", true);
+                editor.commit();
+//                saveFavorite();
+                Snackbar.make(buttonView, "Movie added to favorite list", Snackbar.LENGTH_SHORT).show();
+
+                }else {
+                    SharedPreferences.Editor editor = getSharedPreferences("adnanlapendic.ba.movieapp.DetailActivity", MODE_PRIVATE).edit();
+                    editor.putBoolean("favorite_removed", true);
+                    editor.commit();
+                    Snackbar.make(buttonView, "Movie removed from favorite list", MODE_PRIVATE).show();
+                }
+            }
+        });
+
         initViews();
         
+    }
+
+    private void saveFavorite() {
     }
 
     private void initCollapsingToolbar() {

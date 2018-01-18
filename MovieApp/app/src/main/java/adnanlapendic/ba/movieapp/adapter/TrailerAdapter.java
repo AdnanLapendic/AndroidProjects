@@ -48,7 +48,10 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.MyViewHo
 
     @Override
     public int getItemCount() {
-       return trailerList.size();
+        if(trailerList != null) {
+            return trailerList.size();
+        }
+        return 0;
 
     }
 
@@ -57,8 +60,9 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.MyViewHo
         public TextView title;
         public ImageView thumbnail;
 
-        public MyViewHolder(View view){
+        public MyViewHolder(View view) {
             super(view);
+
             title = view.findViewById(R.id.title);
             thumbnail = view.findViewById(R.id.imageView);
 
